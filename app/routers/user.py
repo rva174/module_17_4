@@ -23,7 +23,6 @@ async def all_users(db: Annotated[Session, Depends(get_db)]):
         )
     return users
 
-
 ################
 @user.get("/user_id")
 async def user_by_id(db: Annotated[Session, Depends(get_db)], user_id: int):
