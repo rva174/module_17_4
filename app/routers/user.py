@@ -4,14 +4,13 @@ from app.backend.db_depends import get_db
 from typing import Annotated
 from app.models.user import User
 from app.models.task import Task
-# from app.schemas import CreateUser, UpdateUser, CreateUser, UpdateUser
-from app.schemas import *
+from app.schemas import CreateUser, UpdateUser
 from sqlalchemy import insert, select, update, delete
 from slugify import slugify
 
 user = APIRouter(prefix="/user", tags=["user"])
 
-users = []
+
 ################
 @user.get("/")
 async def all_users(db: Annotated[Session, Depends(get_db)]):
@@ -22,6 +21,7 @@ async def all_users(db: Annotated[Session, Depends(get_db)]):
             detail='There are no users'
         )
     return users
+
 
 ################
 @user.get("/user_id")
@@ -36,24 +36,25 @@ async def user_by_id(db: Annotated[Session, Depends(get_db)], user_id: int):
 
 
 ################
-@user.get("/user_id/tasks")
-async def tasks_by_user_id(db: Annotated[Session, Depends(get_db)], user_id: int):
-    # ищем пользователя по user_id
-    user_value = db.scalar(select(User).where(User.id == user_id))
-    if user_value is None:
-        return HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail='User was not found'
-        )
+# @user.get("/user_id")
+# async def user_by_user_id(db: Annotated[Session, Depends(get_db)], user_id: int):
+#     # ищем пользователя по user_id
+#     user_value = db.scalar(select(User).where(User.id == user_id))
+#     if user_value is None:
+#         return HTTPException(
+#             status_code=status.HTTP_404_NOT_FOUND,
+#             detail='User was not found'
+#         )
+#     return user_value
 
-    # нашли пользователя - выводим задачи для него
-    tasks = db.scalars(select(Task).where(Task.user_id == user_id)).all()
-    if tasks is None:
-        return HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f'There are no tasks for user_id {user_id}'
-        )
-    return tasks
+    # # нашли пользователя - выводим задачи для него
+    # tasks = db.scalars(select(Task).where(Task.user_id == user_id)).all()
+    # if tasks is None:
+    #     return HTTPException(
+    #         status_code=status.HTTP_404_NOT_FOUND,
+    #         detail=f'There are no tasks for user_id {user_id}'
+    #     )
+
 
 
 ################

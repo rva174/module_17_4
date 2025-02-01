@@ -2,7 +2,18 @@ from fastapi import FastAPI
 from app.routers.user import user
 from app.routers.task import task
 
+
+# import logging
+#
+# logging.getLogger("uvicorn").handlers.clear()
+
+
 app = FastAPI()
+
+# Создание таблиц
+# Base.metadata.create_all(bind=engine)
+
+
 
 @app.get("/")
 async def welcome():
